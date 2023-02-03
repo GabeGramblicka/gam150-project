@@ -1,4 +1,4 @@
-# Allesandro Pesce and the Tugboat Terror
+# Allessandro Pesce and the Tugboat Terror
 #### Team Name: Complicated Fish
 
 ## High Concept:
