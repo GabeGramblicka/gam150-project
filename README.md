@@ -24,7 +24,12 @@ a simplistic 2.5D top-down art style. The music is inspired by upbeat Louisiana 
 
 
 ### Example Code:
-  
 
+-  MapData.c
+  - Uses a text file to read in the swarms and rocks for the level
+- SoundManager
+  - Lots of fun stuff in here. Namely the music player which dynamically changes the song to
+    match where the player is in the level. Also, the sound intercept function is a good way
+    to stop similar sounds from happening at the same time, causing an unwanted amplified sound.
 
 ###### Copyright DigiPen 2023
