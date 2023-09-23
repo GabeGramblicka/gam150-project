@@ -26,8 +26,9 @@
 // Private Constants:
 //------------------------------------------------------------------------------
 #define textScaler 23
-#define staticWidth 350
-#define xMin 200;
+#define staticWidth 384
+#define xMin 210;
+#define goalOffset 100;
 //------------------------------------------------------------------------------
 // Private Structures:
 //------------------------------------------------------------------------------
@@ -63,6 +64,8 @@ void MapDataRead(Stream stream)
 	while (TRUE)
 	{
 		const char* token = StreamReadToken(stream);
+
+		// loop through the line
 		for (int c = 0; c < strlen(token); c++)
 		{
 			if (*(token + c) == '@')
@@ -86,6 +89,8 @@ void MapDataRead(Stream stream)
 
 void MapDataBuild(const char* filename)
 {
+	// We first have to get the size
+	// it also must be closed or else problems will happen
 	if (filename)
 	{
 		Stream stream = StreamOpen(filename);
@@ -113,7 +118,7 @@ void MapDataBuild(const char* filename)
 static Vector2D CalculateWorldPos(int oldRow, int oldCol)
 {
 	Vector2D newVec;
-	newVec.x = (float)(oldCol * textScaler) + 210;
+	newVec.x = (float)(oldCol * textScaler) + xMin;
 	newVec.y = (float)abs((oldRow * textScaler) - (rows * textScaler));
 
 	Vector2D randVec = MapDataAddRand();
@@ -124,11 +129,13 @@ static Vector2D CalculateWorldPos(int oldRow, int oldCol)
 
 static void MapDataGetSize(Stream stream)
 {
-	// getting the size
 	rows = 0;
 	cols = 0;
 	const char* colCheck = StreamReadToken(stream);
+
+	// getting the size
 	cols = (int)strlen(colCheck);
+
 	while (TRUE)
 	{
 		const char* token = StreamReadToken(stream);
@@ -143,7 +150,7 @@ static void MapDataGetSize(Stream stream)
 
 			Vector2D goalPos = CalculateWorldPos(0, cols);
 			Vector2D endingPos;
-			Vector2DSet(&endingPos, 384, goalPos.y - 100);
+			Vector2DSet(&endingPos, staticWidth, goalPos.y - goalOffset);
 			TransformSetTranslation(transform, &endingPos);
 
 			break;
@@ -153,9 +160,11 @@ static void MapDataGetSize(Stream stream)
 
 static Vector2D MapDataAddRand()
 {
+	// find a random direction and distance
 	float distance = RandomFloat(0.0f, 10.0f);
 	float direction = RandomFloat(0.0f, 360.0f);
 
+	// apply that matrix to a new vector
 	Vector2D vec;
 	Vector2DSet(&vec, 1, 1);
 	Vector2DNormalize(&vec, &vec);
